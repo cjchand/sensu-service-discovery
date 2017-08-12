@@ -1,0 +1,9 @@
+{
+  "checks": {
+    "get-role": {
+      "command": "python /etc/sensu/plugins/get-role.py",
+      "standalone": true,
+      "interval": 60
+    }
+  }
+}

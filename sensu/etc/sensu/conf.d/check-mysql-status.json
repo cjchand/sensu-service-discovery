@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "check-mysql-status": {
+      "type": "metric",
+      "command": "/opt/sensu/embedded/bin/check-mysql-status.rb --user root --password --ini /etc/my.cnf --socket /var/lib/mysql/mysql.sock  --database information_schema",
+      "occurrences": 2,
+      "handler": "consul",
+      "subscribers": ["db"],
+      "interval": 60,
+      "service_registry": {
+        "service_name": "db",
+        "port": 3306,
+        "tags": ["db"]
+      }
+    }
+  }
+}

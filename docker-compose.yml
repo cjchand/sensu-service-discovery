@@ -1,0 +1,117 @@
+version: '2'
+
+services:
+  consul1:
+    image: consul
+    container_name: consul1
+    hostname: consul1
+    networks:
+      lamp_net:
+        ipv4_address: 172.16.100.201
+    ports:
+      - '8400:8400'
+      - '8500:8500'
+      - '8600:53'
+    command: agent -server -disable-host-node-id -client=0.0.0.0 -bootstrap-expect 3 -ui --datacenter qlab01
+  consul2:
+    image: consul
+    container_name: consul2
+    hostname: consul2
+    networks:
+      lamp_net:
+        ipv4_address: 172.16.100.202
+    expose:
+      - 8400
+      - 8500
+      - 8600
+    command: agent -server -disable-host-node-id -client=0.0.0.0 -join consul1 --datacenter qlab01
+    depends_on:
+      - consul1
+  consul3:
+    image: consul
+    container_name: consul3
+    hostname: consul3
+    networks:
+      lamp_net:
+        ipv4_address: 172.16.100.203
+    expose:
+      - 8400
+      - 8500
+      - 8600
+    command: agent -server -disable-host-node-id -client=0.0.0.0 -join consul1 --datacenter qlab01
+    depends_on:
+      - consul1
+  sensu:
+    build: sensu
+    networks:
+      lamp_net:
+        ipv4_address: 172.16.100.204
+    ports:
+      - '3000:3000'
+      - '4567:4567'
+      - '5672:5672'
+      - '15672:15672'
+  db-node-01:
+    build: db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      lamp_net:
+        ipv4_address: 172.16.100.105
+    hostname: db-node-01
+    expose:
+      - 3306
+    environment:
+      SENSU_CLIENT_NAME: db-node-01
+      RABBITMQ_URL: amqp://sensu:password@sensu:5672/%2Fsensu
+  web-node-01:
+    build: web
+    depends_on:
+      - sensu
+      - db-node-01
+    ports:
+      - '8001:80'
+    networks:
+      lamp_net:
+        ipv4_address: 172.16.100.101
+    hostname: web-node-01
+    environment:
+      SENSU_CLIENT_NAME: web-node-01
+      RABBITMQ_URL: amqp://sensu:password@sensu:5672/%2Fsensu
+  web-node-02:
+    build: web
+    depends_on:
+      - sensu
+      - db-node-01
+    ports:
+      - '8002:80'
+    networks:
+      lamp_net:
+        ipv4_address: 172.16.100.102
+    hostname: web-node-02
+    environment:
+      SENSU_CLIENT_NAME: web-node-02
+      RABBITMQ_URL: amqp://sensu:password@sensu:5672/%2Fsensu
+  web-node-03:
+    build: web
+    depends_on:
+      - sensu
+      - db-node-01
+    ports:
+      - '8003:80'
+    networks:
+      lamp_net:
+        ipv4_address: 172.16.100.103
+    hostname: web-node-03
+    environment:
+      SENSU_CLIENT_NAME: web-node-03
+      RABBITMQ_URL: amqp://sensu:password@sensu:5672/%2Fsensu
+
+networks:
+  lamp_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.100.0/24
+        gateway: 172.16.100.1

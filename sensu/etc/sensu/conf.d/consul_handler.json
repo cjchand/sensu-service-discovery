@@ -1,0 +1,8 @@
+{
+  "handlers": {
+    "consul": {
+      "type": "pipe",
+      "command": "python /etc/sensu/conf.d/handlers/consul-handler.py --consul 'http://consul1:8500' --datacenter qlab01"
+    }
+  }
+}

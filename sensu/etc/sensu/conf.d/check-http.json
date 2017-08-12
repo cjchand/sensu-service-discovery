@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "check-http": {
+      "type": "metric",
+      "command": "/opt/sensu/embedded/bin/check-http.rb -u http://localhost",
+      "occurrences": 2,
+      "handler": "consul",
+      "subscribers": ["web"],
+      "interval": 60,
+      "ttl": 120,
+      "service_registry": {
+        "service_name": "web",
+        "port": 80,
+        "tags": ["web"]
+      }
+    }
+  }
+}
