@@ -50,6 +50,6 @@ When you run the `seed-consul.sh` script, it will create host entries in Consul 
 
 There are still some things I have to work out:
 
-3. Documentation and tooling around how to add sensu-client configs and Consul services, though there is [some explanation in this preso](https://docs.google.com/presentation/d/1MrVxMbfqwDwSdQv0vh2NmzPt3gD05Mp-OyXkmjoGPAA/edit?usp=sharing) about how the check config and handler work together.
+1. Documentation and tooling around how to add sensu-client configs and Consul services, though there is [some explanation in this preso](https://docs.google.com/presentation/d/1MrVxMbfqwDwSdQv0vh2NmzPt3gD05Mp-OyXkmjoGPAA/edit?usp=sharing) about how the check config and handler work together.
 
 
