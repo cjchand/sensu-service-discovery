@@ -5,7 +5,7 @@ This repo is provided for educational purposes only. This will not be maintained
 
 # Overview
 
-This repo contains the bits used to PoC a Service Discovery toolchain using sensu-client to perform the registration on behalf of the app. 
+This repo contains the bits used to build a reference implementation for a Service Discovery toolchain using sensu-client to perform the registration on behalf of the app. 
 
 # Usage
 
